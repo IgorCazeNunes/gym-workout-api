@@ -1,1 +1,4 @@
-export class CreateExerciseDto {}
+export class CreateExerciseDto {
+  name: string;
+  image: string;
+}
