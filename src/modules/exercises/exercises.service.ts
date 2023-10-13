@@ -12,23 +12,28 @@ export class ExercisesService {
     private exercisesRepository: Repository<Exercise>,
   ) {}
 
-  create(createExerciseDto: CreateExerciseDto) {
-    return this.exercisesRepository.save(createExerciseDto);
+  async findAll(): Promise<Exercise[]> {
+    return await this.exercisesRepository.find();
   }
 
-  findAll() {
-    return this.exercisesRepository.find();
+  async findOne(id: string): Promise<Exercise> {
+    return await this.exercisesRepository.findOneBy({ id: id });
   }
 
-  findOne(id: string) {
+  async create(createExerciseDto: CreateExerciseDto): Promise<Exercise> {
+    const exercise = this.exercisesRepository.create(createExerciseDto);
+    return await this.exercisesRepository.save(exercise);
+  }
+
+  async update(
+    id: string,
+    updateExerciseDto: UpdateExerciseDto,
+  ): Promise<Exercise> {
+    await this.exercisesRepository.update(id, updateExerciseDto);
     return this.exercisesRepository.findOneBy({ id: id });
   }
 
-  update(id: string, updateExerciseDto: UpdateExerciseDto) {
-    return this.exercisesRepository.update(id, updateExerciseDto);
-  }
-
-  remove(id: string) {
-    return this.exercisesRepository.delete(id);
+  async remove(id: string): Promise<void> {
+    await this.exercisesRepository.delete(id);
   }
 }
