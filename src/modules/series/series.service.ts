@@ -6,6 +6,7 @@ import { Repository } from 'typeorm';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Exercise } from '../exercises/entities/exercise.entity';
 import { Rep } from '../reps/entities/rep.entity';
+import { Workout } from '../workouts/entities/workout.entity';
 
 @Injectable()
 export class SeriesService {
@@ -18,6 +19,9 @@ export class SeriesService {
 
     @InjectRepository(Rep)
     private readonly repsRepository: Repository<Rep>,
+
+    @InjectRepository(Workout)
+    private readonly workoutsRepository: Repository<Workout>,
   ) {}
 
   async findAll(): Promise<Serie[]> {
@@ -34,25 +38,29 @@ export class SeriesService {
   }
 
   async create(createSeriesDto: CreateSeriesDto): Promise<Serie> {
-    const { exerciseId } = createSeriesDto;
+    const { exerciseId, workoutId } = createSeriesDto;
     const exercise = await this.exercisesRepository.findOneBy({
       id: exerciseId,
     });
+    const workout = await this.workoutsRepository.findOneBy({ id: workoutId });
 
     const newSerie = new Serie();
     newSerie.exercise = exercise;
+    newSerie.workout = workout;
 
     return await this.seriesRepository.save(newSerie);
   }
 
   async update(id: string, serieDto: UpdateSeriesDto): Promise<Serie> {
-    const { exerciseId } = serieDto;
+    const { exerciseId, workoutId } = serieDto;
     const exercise = await this.exercisesRepository.findOneBy({
       id: exerciseId,
     });
+    const workout = await this.workoutsRepository.findOneBy({ id: workoutId });
 
     const updatedSerie = await this.seriesRepository.findOneBy({ id: id });
     updatedSerie.exercise = exercise;
+    updatedSerie.workout = workout;
 
     return await this.seriesRepository.save(updatedSerie);
   }
