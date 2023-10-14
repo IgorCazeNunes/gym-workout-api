@@ -1,4 +1,5 @@
-import { Entity, PrimaryGeneratedColumn, Column } from 'typeorm';
+import { Serie } from 'src/modules/series/entities/series.entity';
+import { Entity, PrimaryGeneratedColumn, Column, ManyToOne } from 'typeorm';
 
 @Entity()
 export class Rep {
@@ -10,4 +11,13 @@ export class Rep {
 
   @Column()
   qty: number;
+
+  // @Column()
+  // type: string;
+
+  // @Column({ type: 'timestamp', default: () => 'CURRENT_TIMESTAMP' })
+  // created_at: Date;
+
+  @ManyToOne(() => Serie, (serie) => serie.reps)
+  serie: Serie;
 }
