@@ -1,3 +1,4 @@
+import { Type } from 'class-transformer';
 import {
   IsString,
   IsDate,
@@ -35,6 +36,7 @@ export class CreateFullWorkoutDto {
   name: string;
 
   @IsDate()
+  @Type(() => Date)
   finish_at: Date;
 
   @IsArray()
