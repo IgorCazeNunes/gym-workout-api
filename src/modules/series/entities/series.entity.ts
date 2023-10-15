@@ -8,7 +8,10 @@ export class Serie {
   @PrimaryGeneratedColumn('uuid')
   id: string;
 
-  @ManyToOne(() => Exercise, (exercise) => exercise.series)
+  @ManyToOne(() => Exercise, (exercise) => exercise.series, {
+    onDelete: 'SET NULL',
+    nullable: true,
+  })
   exercise: Exercise;
 
   @OneToMany(() => Rep, (rep) => rep.serie, { cascade: true })
