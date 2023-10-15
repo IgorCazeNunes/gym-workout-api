@@ -13,14 +13,22 @@ export class WorkoutsService {
   ) {}
 
   async findAll(): Promise<Workout[]> {
-    return await this.workoutRepository.find({ relations: ['series'] });
+    return await this.workoutRepository
+      .createQueryBuilder('workout')
+      .leftJoinAndSelect('workout.series', 'series')
+      .leftJoinAndSelect('series.exercise', 'exercise')
+      .leftJoinAndSelect('series.reps', 'reps')
+      .getMany();
   }
 
   async findOne(id: string): Promise<Workout> {
-    return await this.workoutRepository.findOne({
-      where: { id },
-      relations: ['series'],
-    });
+    return await this.workoutRepository
+      .createQueryBuilder('workout')
+      .where('workout.id = :id', { id: id })
+      .leftJoinAndSelect('workout.series', 'series')
+      .leftJoinAndSelect('series.exercise', 'exercise.name')
+      .leftJoinAndSelect('series.reps', 'reps')
+      .getOne();
   }
 
   async create(workoutDto: CreateWorkoutDto): Promise<Workout> {
