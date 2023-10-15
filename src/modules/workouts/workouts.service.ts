@@ -54,31 +54,21 @@ export class WorkoutsService {
   ): Promise<Workout> {
     const { name, finish_at, series } = createFullWorkoutDto;
 
-    const workout = new Workout();
-    workout.name = name;
-    workout.finish_at = finish_at;
-    workout.series = [];
+    const workout = this.workoutRepository.create({
+      name,
+      finish_at,
+      series: series.map((serieDto) => {
+        const serie = this.serieRepository.create({
+          exercise: { id: serieDto.exercise.id },
+          reps: serieDto.reps.map((repDto) =>
+            this.repRepository.create(repDto),
+          ),
+        });
+        return serie;
+      }),
+    });
 
-    for (const serieDto of series) {
-      const serie = new Serie();
-      serie.exercise = new Exercise(); // Crie uma nova instância de Exercise
-      serie.exercise.id = serieDto.exercise.id; // Defina o ID do exercício
-
-      serie.reps = [];
-
-      for (const repDto of serieDto.reps) {
-        const rep = new Rep();
-        rep.kg = repDto.kg;
-        rep.qty = repDto.qty;
-        serie.reps.push(rep);
-      }
-
-      workout.series.push(serie);
-    }
-
-    await this.workoutRepository.save(workout);
-
-    return workout;
+    return this.workoutRepository.save(workout);
   }
 
   async update(id: string, workoutDto: UpdateWorkoutDto): Promise<Workout> {
