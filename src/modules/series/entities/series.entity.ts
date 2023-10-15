@@ -14,6 +14,8 @@ export class Serie {
   @OneToMany(() => Rep, (rep) => rep.serie, { cascade: true })
   reps: Rep[];
 
-  @ManyToOne(() => Workout, (workout) => workout.series)
+  @ManyToOne(() => Workout, (workout) => workout.series, {
+    onDelete: 'CASCADE',
+  })
   workout: Workout;
 }

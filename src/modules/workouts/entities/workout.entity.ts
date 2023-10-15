@@ -15,6 +15,8 @@ export class Workout {
   @Column({ type: 'datetime', default: () => "datetime('now')" })
   created_at: Date;
 
-  @OneToMany(() => Serie, (serie) => serie.workout, { cascade: true })
+  @OneToMany(() => Serie, (serie) => serie.workout, {
+    cascade: true,
+  })
   series: Serie[];
 }

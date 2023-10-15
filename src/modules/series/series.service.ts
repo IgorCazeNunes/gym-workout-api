@@ -17,9 +17,6 @@ export class SeriesService {
     @InjectRepository(Exercise)
     private readonly exercisesRepository: Repository<Exercise>,
 
-    @InjectRepository(Rep)
-    private readonly repsRepository: Repository<Rep>,
-
     @InjectRepository(Workout)
     private readonly workoutsRepository: Repository<Workout>,
   ) {}
@@ -72,7 +69,6 @@ export class SeriesService {
       throw new NotFoundException(`Serie with id ${id} not found.`);
     }
 
-    await this.repsRepository.delete({ serie });
     await this.seriesRepository.remove(serie);
   }
 }

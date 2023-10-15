@@ -1,4 +1,4 @@
-import { Injectable } from '@nestjs/common';
+import { Injectable, NotFoundException } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import { Workout } from './entities/workout.entity';
@@ -48,6 +48,15 @@ export class WorkoutsService {
   }
 
   async remove(id: string): Promise<void> {
-    await this.workoutRepository.delete(id);
+    const workout = await this.workoutRepository.findOne({
+      where: { id },
+      relations: ['series'],
+    });
+
+    if (!workout) {
+      throw new NotFoundException(`Workout with id ${id} not found.`);
+    }
+
+    await this.workoutRepository.remove(workout);
   }
 }

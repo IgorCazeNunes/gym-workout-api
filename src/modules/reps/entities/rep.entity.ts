@@ -18,6 +18,8 @@ export class Rep {
   // @Column({ type: 'timestamp', default: () => 'CURRENT_TIMESTAMP' })
   // created_at: Date;
 
-  @ManyToOne(() => Serie, (serie) => serie.reps)
+  @ManyToOne(() => Serie, (serie) => serie.reps, {
+    onDelete: 'CASCADE',
+  })
   serie: Serie;
 }
