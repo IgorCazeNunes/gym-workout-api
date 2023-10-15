@@ -25,23 +25,25 @@ export class RepsService {
   }
 
   async create(createRepDto: CreateRepDto): Promise<Rep> {
-    const { kg, qty, serie } = createRepDto;
+    const { kg, qty, type, serie } = createRepDto;
     const findedSerie = await this.seriesRepository.findOneBy({ id: serie.id });
 
     const newRep = new Rep();
     newRep.kg = kg;
     newRep.qty = qty;
+    newRep.type = type;
     newRep.serie = findedSerie;
 
     return await this.repsRepository.save(newRep);
   }
 
   async update(id: string, updateRepDto: UpdateRepDto): Promise<Rep> {
-    const { kg, qty } = updateRepDto;
+    const { kg, qty, type } = updateRepDto;
 
     const updatedRep = await this.repsRepository.findOneBy({ id: id });
     updatedRep.kg = kg;
     updatedRep.qty = qty;
+    updatedRep.type = type;
 
     return await this.repsRepository.save(updatedRep);
   }

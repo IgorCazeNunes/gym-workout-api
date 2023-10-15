@@ -12,11 +12,11 @@ export class Rep {
   @Column()
   qty: number;
 
-  // @Column()
-  // type: string;
+  @Column({ default: () => "'Normal'" })
+  type: string;
 
-  // @Column({ type: 'timestamp', default: () => 'CURRENT_TIMESTAMP' })
-  // created_at: Date;
+  @Column({ type: 'datetime', default: () => "datetime('now')" })
+  created_at: Date;
 
   @ManyToOne(() => Serie, (serie) => serie.reps, {
     onDelete: 'CASCADE',
