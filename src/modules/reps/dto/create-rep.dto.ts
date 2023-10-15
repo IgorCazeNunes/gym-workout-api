@@ -1,5 +1,5 @@
 export class CreateRepDto {
   kg: number;
   qty: number;
-  serieId: string;
+  serie: { id: string };
 }
