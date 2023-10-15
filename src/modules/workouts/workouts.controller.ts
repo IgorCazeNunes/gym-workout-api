@@ -10,6 +10,7 @@ import {
 import { WorkoutsService } from './workouts.service';
 import { CreateWorkoutDto } from './dto/create-workout.dto';
 import { UpdateWorkoutDto } from './dto/update-workout.dto';
+import { CreateFullWorkoutDto } from './dto/create-full-workout.dto';
 
 @Controller('workouts')
 export class WorkoutsController {
@@ -28,6 +29,11 @@ export class WorkoutsController {
   @Post()
   async create(@Body() workoutDto: CreateWorkoutDto) {
     return await this.workoutsService.create(workoutDto);
+  }
+
+  @Post('/full')
+  createFull(@Body() createWorkoutDto: CreateFullWorkoutDto) {
+    return this.workoutsService.createFull(createWorkoutDto);
   }
 
   @Patch(':id')
