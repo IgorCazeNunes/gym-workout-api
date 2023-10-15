@@ -1,4 +1,4 @@
 export class CreateSeriesDto {
-  exerciseId: string;
-  workoutId: string;
+  exercise: { id: string };
+  workout: { id: string };
 }

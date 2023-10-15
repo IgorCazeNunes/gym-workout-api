@@ -1,11 +1,10 @@
-import { Serie } from 'src/modules/series/entities/series.entity';
 import { Injectable, NotFoundException } from '@nestjs/common';
 import { CreateSeriesDto } from './dto/create-series.dto';
 import { UpdateSeriesDto } from './dto/update-series.dto';
 import { Repository } from 'typeorm';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Exercise } from '../exercises/entities/exercise.entity';
-import { Rep } from '../reps/entities/rep.entity';
+import { Serie } from 'src/modules/series/entities/series.entity';
 import { Workout } from '../workouts/entities/workout.entity';
 
 @Injectable()
@@ -35,29 +34,37 @@ export class SeriesService {
   }
 
   async create(createSeriesDto: CreateSeriesDto): Promise<Serie> {
-    const { exerciseId, workoutId } = createSeriesDto;
-    const exercise = await this.exercisesRepository.findOneBy({
-      id: exerciseId,
+    const { exercise, workout } = createSeriesDto;
+
+    console.log({ createSeriesDto });
+    const findedExercise = await this.exercisesRepository.findOneBy({
+      id: exercise.id,
     });
-    const workout = await this.workoutsRepository.findOneBy({ id: workoutId });
+    const findedWorkout = await this.workoutsRepository.findOneBy({
+      id: workout.id,
+    });
+
+    console.log({ findedExercise, findedWorkout });
 
     const newSerie = new Serie();
-    newSerie.exercise = exercise;
-    newSerie.workout = workout;
+    newSerie.exercise = findedExercise;
+    newSerie.workout = findedWorkout;
 
     return await this.seriesRepository.save(newSerie);
   }
 
   async update(id: string, serieDto: UpdateSeriesDto): Promise<Serie> {
-    const { exerciseId, workoutId } = serieDto;
-    const exercise = await this.exercisesRepository.findOneBy({
-      id: exerciseId,
+    const { exercise, workout } = serieDto;
+    const findedExercise = await this.exercisesRepository.findOneBy({
+      id: exercise.id,
     });
-    const workout = await this.workoutsRepository.findOneBy({ id: workoutId });
+    const findedWorkout = await this.workoutsRepository.findOneBy({
+      id: workout.id,
+    });
 
     const updatedSerie = await this.seriesRepository.findOneBy({ id: id });
-    updatedSerie.exercise = exercise;
-    updatedSerie.workout = workout;
+    updatedSerie.exercise = findedExercise;
+    updatedSerie.workout = findedWorkout;
 
     return await this.seriesRepository.save(updatedSerie);
   }
